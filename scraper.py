@@ -20,14 +20,18 @@ def scrape_genre(url, genre):
     for index, element in enumerate(bookElements[:48]):
         driver.execute_script("arguments[0].scrollIntoView(true);", element)
         time.sleep(1)
+        image = element.get_attribute('src')
         action = ActionChains(driver)
        
         action.move_to_element(element).perform()
         time.sleep(1)
+
         title_elements = driver.find_elements(By.CSS_SELECTOR, 'a.readable.bookTitle')
         titles = [title_element.text.strip() for title_element in title_elements if title_element.text.strip()]
+
         author_elements = driver.find_elements(By.CSS_SELECTOR, '.authorName')
         authors = [author_element.text.strip() for author_element in author_elements if author_element.text.strip()]
+
         more_buttons = driver.find_elements(By.CSS_SELECTOR, 'div.addBookTipDescription a')
         if more_buttons:
             try:
@@ -43,11 +47,12 @@ def scrape_genre(url, genre):
        
         long_description_elements = driver.find_elements(By.CSS_SELECTOR, 'div.addBookTipDescription span[id^=freeText]:not([id*="Container"])')
         long_descriptions = [description.text.strip() for description in long_description_elements if description.text.strip()]
+
         for title, author, description in zip(titles, authors, long_descriptions):
-            print(f"Book {index + 1}: {title} by {author}")
+            print(f"Book {index + 1}: {title} by {author}. Url:{image}")
             print(f"Description: {description}")
             print("---")
-            books.append({'title': title, 'author': author, 'description': description, 'genre': genre})
+            books.append({'title': title, 'author': author, 'image_url':image, 'description': description, 'genre': genre})
         if index < len(bookElements[:48]) - 1:
             driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.CONTROL + Keys.HOME)
             time.sleep(1)
@@ -63,7 +68,7 @@ def append_to_csv(data, filename):
         df.to_csv(filename, index=False)
 
 urls = [
-    ('https://www.goodreads.com/genres/most_read/fiction/', 'fiction'),
+    # ('https://www.goodreads.com/genres/most_read/fiction/', 'fiction'),
     ('https://www.goodreads.com/genres/most_read/non-fiction/', 'non-fiction'),
 ]
 
