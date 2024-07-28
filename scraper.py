@@ -1,12 +1,12 @@
+import os
+import time
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
-import time
-import pandas as pd
-import os
 
 def scrape_genre(url, genre):
     driver = webdriver.Chrome()
@@ -17,7 +17,7 @@ def scrape_genre(url, genre):
         EC.visibility_of_all_elements_located((By.CSS_SELECTOR, '.bookImage'))
     )
     
-    for index, element in enumerate(bookElements[:48]):
+    for index, element in enumerate(bookElements):
         driver.execute_script("arguments[0].scrollIntoView(true);", element)
         time.sleep(1)
         image = element.get_attribute('src')
@@ -53,7 +53,7 @@ def scrape_genre(url, genre):
             print(f"Description: {description}")
             print("---")
             books.append({'title': title, 'author': author, 'image_url':image, 'description': description, 'genre': genre})
-        if index < len(bookElements[:48]) - 1:
+        if index < len(bookElements) - 1:
             driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.CONTROL + Keys.HOME)
             time.sleep(1)
     
@@ -68,7 +68,7 @@ def append_to_csv(data, filename):
         df.to_csv(filename, index=False)
 
 urls = [
-    # ('https://www.goodreads.com/genres/most_read/fiction/', 'fiction'),
+    ('https://www.goodreads.com/genres/most_read/fiction/', 'fiction'),
     ('https://www.goodreads.com/genres/most_read/non-fiction/', 'non-fiction'),
 ]
 
