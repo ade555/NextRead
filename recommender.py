@@ -43,7 +43,7 @@ def get_book_recommendation(input_title, cos_similarity=cosine_similarity):
 st.title('Welcome to NextRead\n')
 
 with st.form(key='recommendation_form'):
-    input_title = st.text_input('Enter a book title:')
+    input_title = st.text_input('Enter a book title. Note that it can only recommend fiction books for now:')
     submit_button = st.form_submit_button(label='Get Recommendations')
 
 if submit_button or input_title:
