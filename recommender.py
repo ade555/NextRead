@@ -4,6 +4,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from fuzzywuzzy import process
 
+st.set_page_config(page_title="NextRead: Book Recommender System")
 @st.cache_data
 def load_data():
     df = pd.read_csv('books.csv')
@@ -39,7 +40,7 @@ def get_book_recommendation(input_title, cos_similarity=cosine_similarity):
         return recommendations
 
 # Streamlit UI
-st.title('Book Recommendation System')
+st.title('Welcome to NextRead\n')
 
 with st.form(key='recommendation_form'):
     input_title = st.text_input('Enter a book title:')
